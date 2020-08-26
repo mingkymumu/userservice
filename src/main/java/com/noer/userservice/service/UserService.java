@@ -1,6 +1,7 @@
 package com.noer.userservice.service;
 
 import com.noer.userservice.domain.UserAccount;
+import com.noer.userservice.exception.UserException;
 import com.noer.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserAccount CreateNewUser(UserAccount user)
+    public UserAccount saveUser(UserAccount user)
     {
         return userRepository.save(user);
     }
@@ -28,5 +29,10 @@ public class UserService {
 
     public Optional<UserAccount> getUserById(Long id){
         return userRepository.findById(id);
+    }
+
+    public void deleteUser(Long id){
+      UserAccount user = userRepository.findById(id).orElseThrow(()-> new UserException("User not found"));
+      userRepository.delete(user);
     }
 }
